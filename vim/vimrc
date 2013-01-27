@@ -114,3 +114,5 @@ set cursorline
 "set cursorColumn
 "防止特殊符号无法正常显示
 set ambiwidth=double
+"防止粘贴缩进混乱
+set paste
