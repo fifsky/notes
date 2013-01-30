@@ -22,3 +22,15 @@ if [ $? = 0 ] ; then
 else
 	echo 'filename is not int'
 fi
+
+#判断参数为空，使用-n 如果string长度非零，则为真
+
+if [ -z $1 ] ; then
+	echo 'arg1 is empty';
+fi
+
+#判断参数个数
+
+if [ $# -lt 3 ] ; then
+	echo 'please input 3 params';
+fi
