@@ -96,6 +96,7 @@ export NVM_DIR="/Users/fifsky/.nvm"
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+alias ll='ls -la'
 
 plugins+=(zsh-completions)
 autoload -Uz compinit && compinit -i
@@ -103,10 +104,59 @@ autoload -Uz compinit && compinit -i
 export APP_ENV="local"
 export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
 
-export GOROOT=/usr/local/Cellar/go/1.7.5/libexec
-export GOPATH=/Users/fifsky/go
+export GOROOT=/usr/local/go
+export GOPATH=/Users/fifsky/go/
 export GOBIN=$GOROOT/bin
 export GOARCH=amd64
 export GOOS=darwin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
+
+function gop(){
+case $1 in
+	v )
+		echo current ${GOPATH}
+		;;
+	* )
+	    currpath=`pwd`
+        if [[ -d "$currpath/src" ]];then
+            export GOPATH=`pwd`
+			echo current ${GOPATH}
+        else
+            echo "dir not fund src"
+        fi
+		;;
+esac
+}
+alias gop='gop'
+
+# set proxy
+proxy () {
+	export ALL_PROXY="socks5://127.0.0.1:1080"
+	export HTTP_PROXY="socks5://127.0.0.1:1080"
+	export HTTPS_PROXY="socks5://127.0.0.1:1080"
+	echo "Proxy on"
+}
+
+# unset proxy
+unproxy () {
+	unset ALL_PROXY
+	unset HTTP_PROXY
+	unset HTTPS_PROXY
+	echo "Proxy off"
+}
+
+#go get to current vendor path
+gopkg () {
+    bak_go_path=${GOPATH}
+    curr_path=`pwd`
+    echo -e "\033[34m[GOPATH]\033[0m" ${bak_go_path}
+    echo -e "\033[34m[CURR PATH]\033[0m" ${curr_path}
+    export GOPATH=~/.govendor
+    rm -rf ~/.govendor
+    echo -e "\033[34m[GO GET]\033[0m" $@
+    go get -v $@
+    rsync -a --exclude=".git/" ~/.govendor/src/ ${curr_path}/vendor/
+    export GOPATH=${bak_go_path}
+    echo -e "\033[34m[DONE]\033[0m"
+}
