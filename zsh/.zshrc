@@ -112,23 +112,19 @@ export GOOS=darwin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
 
-function gop(){
-case $1 in
-	v )
+
+#set go path
+gop(){
+	currpath=`pwd`/
+    gopath=${currpath%src/*}
+
+	if [[ ${gopath} = "" ]];then
+		echo "path not found src"
+	else
+        export GOPATH=${currpath%src/*}
 		echo current ${GOPATH}
-		;;
-	* )
-	    currpath=`pwd`
-        if [[ -d "$currpath/src" ]];then
-            export GOPATH=`pwd`
-			echo current ${GOPATH}
-        else
-            echo "dir not fund src"
-        fi
-		;;
-esac
+    fi
 }
-alias gop='gop'
 
 # set proxy
 proxy () {
