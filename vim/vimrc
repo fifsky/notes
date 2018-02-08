@@ -63,7 +63,7 @@ endif
 " http://www.linuxpowertop.org/known.php
 let &guicursor = &guicursor . ",a:blinkon0"
 
-set mouse=a
+" set mouse=a
 " 不要使用vi的键盘模式，而是vim自己的 
 set nocompatible 
 "设置编码
