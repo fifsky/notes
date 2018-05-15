@@ -87,8 +87,8 @@ export DEFAULT_USER="$(whoami)"
 #忽略重复的命令
 export HISTCONTROL=ignoredups
 export NODE_PATH="/usr/local/lib/node_modules/"
-source /usr/local/lib/z.sh
 
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/dist
 export NVM_DIR="/Users/fifsky/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -102,7 +102,6 @@ plugins+=(zsh-completions)
 autoload -Uz compinit && compinit -i
 
 export APP_ENV="local"
-export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
 
 export GOROOT=/usr/local/go
 export GOPATH=/Users/fifsky/go/
@@ -111,7 +110,6 @@ export GOARCH=amd64
 export GOOS=darwin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
-
 
 #set go path
 gop(){
@@ -142,17 +140,6 @@ unproxy () {
 	echo "Proxy off"
 }
 
-#go get to current vendor path
-gopkg () {
-    bak_go_path=${GOPATH}
-    curr_path=`pwd`
-    echo -e "\033[34m[GOPATH]\033[0m" ${bak_go_path}
-    echo -e "\033[34m[CURR PATH]\033[0m" ${curr_path}
-    export GOPATH=~/.govendor
-    rm -rf ~/.govendor
-    echo -e "\033[34m[GO GET]\033[0m" $@
-    go get -v $@
-    rsync -a --exclude=".git/" ~/.govendor/src/ ${curr_path}/vendor/
-    export GOPATH=${bak_go_path}
-    echo -e "\033[34m[DONE]\033[0m"
-}
+#php
+export PATH="/usr/local/opt/php@7.1/bin:$PATH"
+export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
