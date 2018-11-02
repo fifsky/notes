@@ -83,12 +83,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
 export DEFAULT_USER="$(whoami)"
 #忽略重复的命令
 export HISTCONTROL=ignoredups
 export NODE_PATH="/usr/local/lib/node_modules/"
+source /usr/local/lib/z.sh
 
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/dist
 export NVM_DIR="/Users/fifsky/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -106,12 +107,9 @@ export APP_ENV="local"
 export GOROOT=/usr/local/go
 export GOPATH=/Users/fifsky/go/
 export GOBIN=$GOROOT/bin
-export GOARCH=amd64
-export GOOS=darwin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
 
-#set go path
 gop(){
 	currpath=`pwd`/
     gopath=${currpath%src/*}
@@ -124,11 +122,21 @@ gop(){
     fi
 }
 
+goproxy () {
+	export GOPROXY=http://47.75.200.48:8888
+    echo "GOPROXY ON"
+}
+
+ungoproxy () {
+    unset GOPROXY
+    echo "GOPROXY OFF"
+}
+
 # set proxy
 proxy () {
-	export ALL_PROXY="socks5://127.0.0.1:1080"
-	export HTTP_PROXY="socks5://127.0.0.1:1080"
-	export HTTPS_PROXY="socks5://127.0.0.1:1080"
+	export ALL_PROXY="socks5://127.0.0.1:1086"
+	export HTTP_PROXY="socks5://127.0.0.1:1086"
+	export HTTPS_PROXY="socks5://127.0.0.1:1086"
 	echo "Proxy on"
 }
 
@@ -139,7 +147,6 @@ unproxy () {
 	unset HTTPS_PROXY
 	echo "Proxy off"
 }
-
-#php
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH="/usr/local/opt/php@7.1/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
