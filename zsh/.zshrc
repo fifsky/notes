@@ -85,7 +85,7 @@ source $ZSH/oh-my-zsh.sh
 
 
 export DEFAULT_USER="$(whoami)"
-#忽略重复的命令
+# 忽略重复的命令
 export HISTCONTROL=ignoredups
 export NODE_PATH="/usr/local/lib/node_modules/"
 source /usr/local/lib/z.sh
@@ -94,43 +94,28 @@ export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/dist
 export NVM_DIR="/Users/fifsky/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
+# 命令行别名
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ll='ls -la'
+alias drmi="docker images | grep '<none>' | awk '{print $3}' | xargs -r docker rmi"
 
 plugins+=(zsh-completions)
 autoload -Uz compinit && compinit -i
 
 export APP_ENV="local"
 
+# golang
 export GOROOT=/usr/local/go
-export GOPATH=/Users/fifsky/go/
+#export GOPATH=/Users/fifsky/go/
 export GOBIN=$GOROOT/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
-
-gop(){
-	currpath=`pwd`/
-    gopath=${currpath%src/*}
-
-	if [[ ${gopath} = "" ]];then
-		echo "path not found src"
-	else
-        export GOPATH=${currpath%src/*}
-		echo current ${GOPATH}
-    fi
-}
-
-goproxy () {
-	export GOPROXY=http://47.75.200.48:8888
-    echo "GOPROXY ON"
-}
-
-ungoproxy () {
-    unset GOPROXY
-    echo "GOPROXY OFF"
-}
+export GO1111MODULE=on
+export GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+export GOPRIVATE=git.verystar.cn
+export GOSUMDB=off
 
 # set proxy
 proxy () {
