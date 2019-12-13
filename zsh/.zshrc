@@ -49,7 +49,7 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git composer docker docker-compose osx zsh-autosuggestions)
+plugins=(git kubectl composer docker docker-compose osx zsh-autosuggestions)
 
 # User configuration
 
@@ -85,7 +85,7 @@ source $ZSH/oh-my-zsh.sh
 
 
 export DEFAULT_USER="$(whoami)"
-# 忽略重复的命令
+#忽略重复的命令
 export HISTCONTROL=ignoredups
 export NODE_PATH="/usr/local/lib/node_modules/"
 source /usr/local/lib/z.sh
@@ -94,37 +94,43 @@ export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/dist
 export NVM_DIR="/Users/fifsky/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# 命令行别名
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ll='ls -la'
-alias drmi="docker images | grep '<none>' | awk '{print $3}' | xargs -r docker rmi"
+alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 plugins+=(zsh-completions)
 autoload -Uz compinit && compinit -i
 
+#source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+#PS1='$(kube_ps1)'$PS1
+
 export APP_ENV="local"
 
-# golang
 export GOROOT=/usr/local/go
 #export GOPATH=/Users/fifsky/go/
 export GOBIN=$GOROOT/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOPATH/bin
 export GO1111MODULE=on
-export GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+export GOPROXY=https://goproxy.cn,direct
 export GOPRIVATE=git.verystar.cn
-export GOSUMDB=off
+#export GOSUMDB=off
+
+ungoproxy () {
+    unset GOPROXY
+    echo "GOPROXY OFF"
+}
 
 # set proxy
 proxy () {
-	export ALL_PROXY="socks5://127.0.0.1:1086"
-	export HTTP_PROXY="socks5://127.0.0.1:1086"
-	export HTTPS_PROXY="socks5://127.0.0.1:1086"
-	echo "Proxy on"
+	export ALL_PROXY="socks5://127.0.0.1:1080"
+	export HTTP_PROXY="socks5://127.0.0.1:1080"
+	export HTTPS_PROXY="socks5://127.0.0.1:1080"
+	export NO_PROXY="git.verystar.cn,172.17.0.0/16"
+	echo "Proxy on private"
 }
-
 # unset proxy
 unproxy () {
 	unset ALL_PROXY
@@ -132,6 +138,40 @@ unproxy () {
 	unset HTTPS_PROXY
 	echo "Proxy off"
 }
+
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+
+# added by travis gem
+[ -f /Users/fifsky/.travis/travis.sh ] && source /Users/fifsky/.travis/travis.sh
+
+# pub dev config .env
+dev () {
+   scp /Users/fifsky/wwwroot/devconf/dev.env root@10.64.146.16:/home/wwwroot/devconf/.env
+}
+
+# change docker env
+dockerenv () {
+	if [ "$1" == "minikube" ]; then
+		eval $(minikube docker-env)
+		echo "Docker env changed to minikube"
+	else
+		eval $(docker-machine env -u)	
+		echo "Docker env restore to local"	
+	fi
+}
+
+
+alias drmi="docker images | grep '<none>' | awk '{print $3}' | xargs docker rmi"
+alias drmc="docker ps -qf status=exited | xargs docker rm"
+
+export WEBPATH=~/wwwroot
+export DOCKER_USERNAME=xudong.cai@verystar.cn
+export DOCKER_PASSWORD=198996Cxd18
 export PATH="/usr/local/opt/php@7.1/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
+export PATH="/usr/local/opt/gettext/bin:$PATH"
+export LC_ALL=en_US.UTF-8
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
